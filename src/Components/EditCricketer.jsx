@@ -1,7 +1,7 @@
 import { Button, FormControl, FormGroup, Input, InputLabel, makeStyles, Typography } from "@material-ui/core";
-import { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { addCricketer } from "../Service/api";
+import { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import { editCricketer, getCricketers } from "../Service/api";
 
 const useStyles = makeStyles({
     container: {
@@ -20,24 +20,34 @@ const initialValue = {
     phone: ''
 }
 
-const AddCricketer = ()=>{
+const EditCricketer = ()=>{
     const [ cricketer, setCricketer ] = useState(initialValue);
     const { name, username, email, phone } = cricketer;
+    const { id } = useParams();
     const classes = useStyles();
-    let history = useHistory();
+    const history = useHistory();
 
-    const onValueChange = (e)=>{
-        console.log(e.target.value);
-        setCricketer({ ...cricketer, [e.target.name]: e.target.value });
+    useEffect(()=>{
+        loadUserData();
+    },[]);
+
+    const loadUserData = async ()=>{
+        var res = await getCricketers(id);
+        setCricketer(res.data);
     }
 
-    const newCricketer = async ()=>{
-        await addCricketer(cricketer);
+    const onValueChange = (e)=>{
+        console.log(e);
+        setCricketer({ ...cricketer, [e.target.name]: e.target.value })
+    }
+
+    const editCricketerDetails = async ()=>{
+        await editCricketer(id,cricketer);
         history.push('./all');
     }
     return (
         <FormGroup className={classes.container}>
-            <Typography variant="h4">Add user</Typography>
+            <Typography variant="h4">Edit user</Typography>
             <FormControl>
                 <InputLabel htmlFor="my-input">Name</InputLabel>
                 <Input name='name' onChange={(e)=>onValueChange(e)} value={name} id="my-input" />
@@ -55,10 +65,10 @@ const AddCricketer = ()=>{
                 <Input name='phone' onChange={(e)=>onValueChange(e)} value={phone} id="my-input" />
             </FormControl>
             <FormControl>
-                <Button variant="contained" color="primary" onClick={()=>newCricketer()} >Add user</Button>
+                <Button variant="contained" color="primary" onClick={()=>editCricketerDetails()}>SUBMIT EDIT</Button>
             </FormControl>
         </FormGroup>
     );
 }
 
-export default AddCricketer;
+export default EditCricketer;
