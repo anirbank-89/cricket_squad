@@ -54,7 +54,7 @@ const CricketerList = ()=>{
                 </TableRow>
             </TableHead>
             <TableBody>
-                {crickters.map(user=>{
+                {crickters.map(user=>(
                         <TableRow className={classes.row}>
                             <TableCell>{user._id}</TableCell>
                             <TableCell>{user.name}</TableCell>
@@ -66,7 +66,7 @@ const CricketerList = ()=>{
                                 <Button variant="contained" color="secondary" onClick={()=>deleteCricketerData(user._id)}>Delete</Button>
                             </TableCell>
                         </TableRow>
-                    })}
+                ))}
             </TableBody>
         </Table>
     );
