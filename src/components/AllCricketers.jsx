@@ -13,7 +13,7 @@ var useStyle = makeStyles({
     thead: {
         '& > *': {
             background: '#000000',
-            color: '#FFFFFF',
+            color: "white",
             fontSize: 20
         }
     },
@@ -36,8 +36,9 @@ var AllCricketers = () => {
 
     var getAllCricketers = async () => {
         var res = await getCricketers();
-        console.log(res.data);
-        setCricketers(res.data.data);
+        console.log("api data",res.data.data);
+        let data = res.data.data;
+        setCricketers(data);
     }
 
     var deleteData = async (id) => {
@@ -48,9 +49,9 @@ var AllCricketers = () => {
     var sl = 1;
 
     return (
-        <Table className={classes.table}>
-            <TableHead>
-                <TableRow className={classes.thead}>
+        <Table style={useStyle.table}>
+            <TableHead >
+                <TableRow style={useStyle.thead}>
                     <TableCell>Id</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Email</TableCell>
@@ -58,27 +59,36 @@ var AllCricketers = () => {
                     <TableCell>Location</TableCell>
                     <TableCell>Age</TableCell>
                     <TableCell>Gender</TableCell>
-                    {/* <TableCell>Languages</TableCell> */}
+                    <TableCell>Languages</TableCell>
                     <TableCell></TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
                 {
-                    cricketers.map(cricketer => {
-                        <TableRow className={classes.row}>
+                    cricketers.map((cricketer) => {
+                        return(
+                            <TableRow style={useStyle.row}>
                             <TableCell>{sl++}</TableCell>
                             <TableCell>{cricketer.name}</TableCell>
                             <TableCell>{cricketer.email}</TableCell>
-                            <TableCell>{cricketer.password}</TableCell>
-                            <TableCell>{cricketer.location}</TableCell>
+                            <TableCell>{cricketer.pwd}</TableCell>
+                            <TableCell>{cricketer.loc}</TableCell>
                             <TableCell>{cricketer.age}</TableCell>
-                            <TableCell>{cricketer.gender}</TableCell>
-                            {/* <TableCell>{cricketer.languages}</TableCell> */}
+                            <TableCell>{cricketer.sex}</TableCell>
+                            <TableCell>{cricketer.lang.map((lang) => {
+                                return(
+                                    <ul>
+                                        <li>{lang}</li>
+                                    </ul>
+                                )    
+                            })}</TableCell>
                             <TableCell>
                                 <Button variant="contained" color="primary" style={{marginRight: 10}} component={Link} to={`/edit/${cricketer._id}`}>Edit</Button>
                                 <Button variant="contained" color="secondary" onClick={() => deleteData(cricketer._id)}>Delete</Button>
                             </TableCell>
                         </TableRow>
+                        )
+                        
                     })
                 }
             </TableBody>
